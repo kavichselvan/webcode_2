@@ -15,22 +15,27 @@ app.use(express.urlencoded({ limit: '30mb', extended: true }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('This is a stack Overflow clone API');
+  res.send('This is a Stack Overflow clone API');
 });
 
 app.use('/user', userRoutes);
 app.use('/questions', questionRoutes);
 app.use('/answer', answerRoutes);
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000; // Use 3000 as a default if PORT is not provided
 const DATABASE_URL = process.env.CONNECTION_URL;
-mongoose.set('strictQuery', true);
+
+console.log('DATABASE_URL:', DATABASE_URL);
+console.log('PORT:', PORT);
 
 mongoose
   .connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() =>
+  .then(() => {
+    console.log('Connected to MongoDB');
     app.listen(PORT, () => {
-      console.log(`server running on port ${PORT}`);
-    })
-  )
-  .catch((err) => console.log(err.message));
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err.message);
+  });
