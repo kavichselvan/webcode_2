@@ -22,20 +22,19 @@ app.use('/user', userRoutes);
 app.use('/questions', questionRoutes);
 app.use('/answer', answerRoutes);
 
-const PORT = process.env.PORT || 3000; // Use 3000 as a default if PORT is not provided
+const PORT = process.env.PORT || 4000; // Use 3000 as a default if PORT is not provided
 const DATABASE_URL = process.env.CONNECTION_URL;
 
 console.log('DATABASE_URL:', DATABASE_URL);
 console.log('PORT:', PORT);
 
-mongoose
-  .connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB:', err.message);
+  });
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
